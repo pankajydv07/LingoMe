@@ -82,7 +82,7 @@ function App() {
       
       setMessages(prev => [...prev, translatedMessage]);
     } catch (error) {
-      console.log("API Key from Env:", import.meta.env.VITE_OPENAI_API_KEY);
+      
       console.error('Translation error:', error);
       const errorMessage = {
         
