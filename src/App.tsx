@@ -82,8 +82,10 @@ function App() {
       
       setMessages(prev => [...prev, translatedMessage]);
     } catch (error) {
+      console.log("API Key from Env:", import.meta.env.VITE_OPENAI_API_KEY);
       console.error('Translation error:', error);
       const errorMessage = {
+        
         text: 'Sorry, an error occurred during translation. Please check your OpenAI API key.',
         isUser: false
       };
