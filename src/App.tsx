@@ -102,7 +102,7 @@ function App() {
         <div className="flex items-center justify-center gap-4">
           <Parrot className="w-12 h-12 text-blue-400" />
           <div>
-            <h1 className="text-4xl font-bold text-green-400">PollyGlot</h1>
+            <h1 className="text-4xl font-bold text-green-400">LingoMe</h1>
             <p className="text-gray-400">Perfect Translation Every Time</p>
           </div>
         </div>
