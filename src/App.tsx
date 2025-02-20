@@ -10,22 +10,27 @@ const openai = new OpenAI({
 });
 
 const languages = [
-  { code: 'fr', name: 'French', flag: '🇫🇷' },
-  { code: 'es', name: 'Spanish', flag: '🇪🇸' },
-  { code: 'ja', name: 'Japanese', flag: '🇯🇵' },
   { code: 'hi', name: 'Hindi', flag: '🇮🇳' },
-  { code: 'ne', name: 'Nepali', flag: '🇳🇵' },
-  { code: 'de', name: 'German', flag: '🇩🇪' },
-  { code: 'it', name: 'Italian', flag: '🇮🇹' },
-  { code: 'pt', name: 'Portuguese', flag: '🇵🇹' },
-  { code: 'ru', name: 'Russian', flag: '🇷🇺' },
-  { code: 'ar', name: 'Arabic', flag: '🇸🇦' },
-  { code: 'ko', name: 'Korean', flag: '🇰🇷' },
-  { code: 'tr', name: 'Turkish', flag: '🇹🇷' },
-  { code: 'vi', name: 'Vietnamese', flag: '🇻🇳' },
-  { code: 'th', name: 'Thai', flag: '🇹🇭' },
-  { code: 'pl', name: 'Polish', flag: '🇵🇱' }
+  { code: 'bn', name: 'Bengali', flag: '🇮🇳' },
+  { code: 'ta', name: 'Tamil', flag: '🇮🇳' },
+  { code: 'te', name: 'Telugu', flag: '🇮🇳' },
+  { code: 'mr', name: 'Marathi', flag: '🇮🇳' },
+  { code: 'gu', name: 'Gujarati', flag: '🇮🇳' },
+  { code: 'pa', name: 'Punjabi', flag: '🇮🇳' },
+  { code: 'ur', name: 'Urdu', flag: '🇮🇳' },
+  { code: 'ml', name: 'Malayalam', flag: '🇮🇳' },
+  { code: 'kn', name: 'Kannada', flag: '🇮🇳' },
+  { code: 'or', name: 'Odia', flag: '🇮🇳' },
+  { code: 'as', name: 'Assamese', flag: '🇮🇳' },
+  { code: 'mni', name: 'Manipuri', flag: '🇮🇳' },
+  { code: 'bho', name: 'Bhojpuri', flag: '🇮🇳' },
+  { code: 'sd', name: 'Sindhi', flag: '🇮🇳' },
+  { code: 'ks', name: 'Kashmiri', flag: '🇮🇳' },
+  { code: 'sa', name: 'Sanskrit', flag: '🇮🇳' },
+  { code: 'ne', name: 'Nepali', flag: '🇳🇵' }, // Keep Nepali if needed
+  { code: 'en', name: 'English', flag: '🇬🇧' }, // Optional
 ];
+
 
 interface Message {
   text: string;
@@ -39,7 +44,9 @@ function App() {
     isUser: false
   }]);
   const [inputText, setInputText] = useState('');
-  const [targetLanguage, setTargetLanguage] = useState('fr');
+  const [fromLanguage, setFromLanguage] = useState('en'); // Default English
+  const [targetLanguage, setTargetLanguage] = useState('hi'); // Default Hindi
+
   const [loading, setLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -63,9 +70,10 @@ function App() {
         messages: [
           {
             role: "system",
-            content: `You are a translator. Translate the following text to ${
-              languages.find(l => l.code === targetLanguage)?.name
-            }. Only respond with the translation, nothing else.`
+            content: `You are a translator. Translate the following text from ${
+  languages.find(l => l.code === fromLanguage)?.name
+} to ${languages.find(l => l.code === targetLanguage)?.name}. Only respond with the translation, nothing else.`
+
           },
           {
             role: "user",
@@ -111,6 +119,46 @@ function App() {
       {/* Chat container */}
       <div className="max-w-2xl mx-auto p-4">
         {/* Language Selection Box */}
+        {/* From Language Selection */}
+<div className="bg-white/10 rounded-xl p-4 mb-6">
+  <h2 className="text-lg font-semibold mb-3 text-blue-300">Select Source Language</h2>
+  <div className="relative">
+    <button
+      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+      className="w-full flex items-center justify-between bg-white/5 hover:bg-white/10 
+                 transition-colors rounded-lg p-3 border border-blue-500/30"
+    >
+      <div className="flex items-center gap-2">
+        <span className="text-2xl">{languages.find(l => l.code === fromLanguage)?.flag}</span>
+        <span>{languages.find(l => l.code === fromLanguage)?.name}</span>
+      </div>
+      <ChevronDown className={`w-5 h-5 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+    </button>
+
+    {isDropdownOpen && (
+      <div className="absolute w-full mt-2 bg-[#1A2A3F] border border-blue-500/30 
+                    rounded-lg shadow-xl max-h-60 overflow-y-auto z-10">
+        <div className="grid grid-cols-2 gap-1 p-2">
+          {languages.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => {
+                setFromLanguage(lang.code);
+                setIsDropdownOpen(false);
+              }}
+              className={`flex items-center gap-2 p-2 rounded hover:bg-blue-600/50 transition-colors
+                        ${fromLanguage === lang.code ? 'bg-blue-600' : ''}`}
+            >
+              <span className="text-xl">{lang.flag}</span>
+              <span>{lang.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
         <div className="bg-white/10 rounded-xl p-4 mb-6">
           <h2 className="text-lg font-semibold mb-3 text-blue-300">Select Translation Language</h2>
           <div className="relative">
